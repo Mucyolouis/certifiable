@@ -1,0 +1,43 @@
+<div>
+    <span>{{ e($user->firstname) }} {{ e($user->lastname) }}</span>
+        <span>and</span>
+    <span>{{ e($spouse->firstname) }} {{ e($spouse->lastname) }}</span>
+</div>
+<p>Were United in Holy Matrimony</p>
+<div>
+    <p>on <span>{{ $marriage_date->format('F j, Y') }}</span></p>
+    <p>At <span>{{ $officiant->firstname }}</span></p>
+    <p>By <span><b>Pastor</b> {{ $officiant->firstname }} {{ $officiant->lastname }}</span></p>
+</div>
+<div>
+    <h2>Witnesses:</h2>
+    <div>
+        <div>{{ $user->god_parent }}</div>
+        <div>{{ $spouse->god_parent }}</div>
+    </div>
+</div>
+
+
+
+<div>
+    <h1 >Marriage Certificate</h1>
+    <p>This is to certify that</p>
+    <div>
+        <span>{{ e($user->firstname) }} {{ e($user->lastname) }}</span>
+            <span>and</span>
+    <span>{{ e($spouse->firstname) }} {{ e($spouse->lastname) }}</span>
+    </div>
+    <p>Were United in Holy Matrimony</p>
+    <div>
+        <p>on <span>{{ $marriage_date->format('F j, Y') }}</span></p>
+        <p>At <span>{{ $officiant->firstname }}</span></p>
+        <p>By <span><b>Pastor</b> {{ $officiant->firstname }} {{ $officiant->lastname }}</span></p>
+    </div>
+    <div>
+        <h2>Witnesses:</h2>
+        <div>
+            <div>{{ $user->god_parent }}</div>
+            <div>{{ $spouse->god_parent }}</div>
+        </div>
+    </div>
+</div>
