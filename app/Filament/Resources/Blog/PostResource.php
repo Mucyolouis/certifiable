@@ -103,10 +103,19 @@ class PostResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                Tables\Columns\TextColumn::make('author.fullname')
+                Tables\Columns\TextColumn::make('author_fullname')
                     ->label('Author')
-                    ->searchable(['firstname', 'lastname'])
-                    ->sortable()
+                    ->getStateUsing(fn (Post $record): string => $record->author->firstname . ' ' . $record->author->lastname)
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        return $query->whereHas('author', function (Builder $query) use ($search) {
+                            $query->where('firstname', 'like', "%{$search}%")
+                                ->orWhere('lastname', 'like', "%{$search}%");
+                        });
+                    })
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('author.firstname', $direction)
+                                     ->orderBy('author.lastname', $direction);
+                    })
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('status')

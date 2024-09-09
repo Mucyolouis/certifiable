@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Marriage;
 use App\Models\User;
+use App\Models\Ministry;
+use App\Models\Church;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -90,10 +92,16 @@ class PdfController extends Controller
     {
         // Retrieve data for the specific baptism record
         $baptism = User::findOrFail($id);
+        $ministry = Ministry::findOrFail($baptism->ministry_id);
+        $church = Church::findOrFail($baptism->church_id);
 
         // Load the view and pass the data
         // $pdf = PDF::loadView('pdf.baptism', ['baptism' => $baptism]);
-        $pdf = Pdf::loadView('pdf.recommendation', ['baptism' => $baptism]);
+        $pdf = Pdf::loadView('pdf.recommendation', [
+            'baptism' => $baptism,
+            'ministry' => $ministry, 
+            'church' => $church,
+        ]);
         $pdf->setPaper('a4', 'landscape');
 
         

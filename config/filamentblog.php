@@ -28,7 +28,7 @@ return [
         'model' => User::class,
         'foreign_key' => 'user_id',
         'columns' => [
-            'name' => 'fullname', // This will use the accessor method we'll create
+            'name' => 'firstname', // This will use the accessor method we'll create
             'avatar' => 'profile_photo_path', // column name for avatar
         ],
     ],

@@ -1,69 +1,116 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $baptism->name }} Baptism Certificate</title>
-    <!-- Include Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Recommendation Letter</title>
     <style>
-        /* Custom styling for the certificate */
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lato&display=swap');
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
         .certificate {
-            border: 2px solid #333; /* Add a border */
-            padding: 5px; /* Add padding */
-            /* border-radius: 10px; Rounded corners */
-            background-color: #f9f9f9; /* Light gray background */
-        }
-        .certificate h3 {
-            font-weight: bold;
+            width: 800px;
+            padding: 40px;
+            background-color: white;
+            border: 2px solid #5f9ea0;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             text-align: center;
-            margin-bottom: 5px;
+            position: relative;
         }
-        .certificate p {
-            margin-bottom: 5px;
+
+        .title {
+            font-family: 'Great Vibes', cursive;
+            color: #5f9ea0;
+            font-size: 48px;
+            margin-bottom: 10px;
+            position: relative;
         }
-        .certificate ul {
-            list-style-type: none;
-            padding-left: 0;
+
+        .title::before, .title::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 100px;
+            height: 2px;
+            background-color: #5f9ea0;
+        }
+
+        .title::before {
+            left: -110px;
+        }
+
+        .title::after {
+            right: -110px;
+        }
+
+        .subtitle, .details, .blessing {
+            font-family: 'Lato', sans-serif;
+            margin: 10px 0;
+        }
+
+        .name {
+            font-family: 'Great Vibes', cursive;
+            font-size: 36px;
+            margin: 10px 0;
+        }
+
+        .details {
+            margin-top: 30px;
+        }
+
+        /* .certificate::before, .certificate::after {
+            content: '🌸';
+            font-size: 48px;
+            position: absolute;
+        } */
+
+        .certificate::before {
+            top: 10px;
+            left: 10px;
+        }
+
+        .certificate::after {
+            bottom: 10px;
+            right: 10px;
+        }
+
+        .blessing {
+            font-style: italic;
+            margin-top: 20px;
+        }
+
+        .ministry, .church {
+            font-family: 'Lato', sans-serif;
+            font-weight: bold;
+            color: #5f9ea0;
         }
     </style>
 </head>
 <body>
-    <div class="container mt-3">
-        <div class="card certificate">
-            <div class="card-body">
-                <h3>Recommendation Letter</h3>
-                <p>This is to Recommend that</p>
-                <h4 class="text-center mb-4">{{ $baptism->name }}</h4>
-                <p>is our member of church <strong>{{ $baptism->date }}</strong></p>
-                <p>at <strong>{{ $baptism->church_name }} Church</strong></p>
-                
-                {{-- <p>Witnessed by:</p>
-                <ul>
-                    <li>
-                        Father:{{ $baptism->father_name }}
-                    </li>
-                    <li>
-                        Mother:{{ $baptism->mother_name }}
-                    </li>
-                    <li>
-                        Godparent:{{ $baptism->godparent}}
-                    </li>
-                </ul> --}}
-                <p class="text-center mt-4">May God bless and guide you on your spiritual journey.</p>
-
-                <div style="text-align:center; margin-top: 30px;">
-                    {!! DNS2D::getBarcodeHTML(route('baptism.check', ['id' => $baptism->id]), 'QRCODE', 4, 4) !!}
-                </div>
-            </div>
+    <div class="certificate">
+        <h1 class="title">Recommendation Letter</h1>
+        <p class="subtitle">This is to Recommend that</p>
+        <div class="name">
+            {{ $baptism->name }}
+        </div>
+        <p class="subtitle">is our member of</p>
+        <p class="ministry">{{ $ministry->name }}</p>
+        <div class="details">
+            <p>Since <span class="date">{{ $baptism->baptized_at }}</span></p>
+            <p>At <span class="church">{{ $church->name }} Church</span></p>
+        </div>
+        <p class="blessing">May God bless and guide you on your spiritual journey.</p>
+        <div style="text-align:center; margin-top: 30px;">
+            {!! DNS2D::getBarcodeHTML(route('baptism.check', ['id' => $baptism->id]), 'QRCODE', 4, 4) !!}
         </div>
     </div>
-
-    <!-- Include Bootstrap JS (optional) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
