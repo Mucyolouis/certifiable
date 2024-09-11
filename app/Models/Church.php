@@ -32,4 +32,9 @@ class Church extends Model
         
         return "Total: {$total}\nBaptized Christians: {$baptizedChristians}\nUnbaptized: {$unbaptized}\nPastors: {$pastors}";
     }
+
+    public function baptizedUsers()
+    {
+        return $this->hasMany(User::class)->whereNotNull('baptized_at');
+    }
 }

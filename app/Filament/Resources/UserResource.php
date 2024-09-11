@@ -250,7 +250,7 @@ class UserResource extends Resource
                         ->requiresConfirmation()
                         ->visible(function (User $record) {
                             $currentUser = Auth::user();
-                            return $currentUser->hasRole('pastor') && $record->baptized == 0;
+                            return $currentUser->hasRole('pastor') && $record->baptized == 0 && $currentUser->baptized == 1;
                         })
                         ->hidden(fn (User $record) => $record->baptized)
                         ->authorize(fn () => Auth::user()->hasRole('pastor')),

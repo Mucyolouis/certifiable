@@ -28,7 +28,7 @@ return [
         'model' => User::class,
         'foreign_key' => 'user_id',
         'columns' => [
-            'name' => 'firstname', // This will use the accessor method we'll create
+            'name' => 'username', // This will use the accessor method we'll create
             'avatar' => 'profile_photo_path', // column name for avatar
         ],
     ],
@@ -40,7 +40,7 @@ return [
         ],
     ],
     'recaptcha' => [
-        'enabled' => false, // true or false
+        'enabled' => true, // true or false
         'site_key' => env('RECAPTCHA_SITE_KEY'),
         'secret_key' => env('RECAPTCHA_SECRET_KEY'),
     ],

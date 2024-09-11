@@ -106,7 +106,7 @@
             </div>
             <div class="form-row">
                 <label>Church:</label>
-                <span class="input">{{ $baptism->church }}</span>
+                <span class="input">{{ $church->name }}</span>
             </div>
             <div class="form-row">
                 <label>Date:</label>

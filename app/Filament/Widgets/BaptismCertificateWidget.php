@@ -10,8 +10,10 @@ use Filament\Notifications\Actions\Action;
 
 class BaptismCertificateWidget extends Widget
 {
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 2;
+
     protected static string $view = 'filament.widgets.baptism-certificate-widget';
+    
     public $canDownload;
 
 

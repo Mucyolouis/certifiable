@@ -12,14 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('transfer_requests', function (Blueprint $table) {
-            $table->enum('reason', [
-                'Geographical Relocation',
-                'Theological Differences',
-                'Family Reasons',
-                'Work',
-                'Church Leadership and Management',
-                'Other',
-            ])->nullable();
+            $table->text('reason')->required()->before('description');
         });
     }
 

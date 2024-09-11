@@ -74,15 +74,66 @@
             featureImportanceChart.render();
 
             var transferReasonsChart = new ApexCharts(document.querySelector("#transferReasonsChart"), {
-                series: [{
-                    data: @json(array_column($transferReasons, 'value'))
-                }],
-                chart: {
-                    type: 'pie',
-                },
-                labels: @json(array_column($transferReasons, 'name')),
-            });
-            transferReasonsChart.render();
+    series: [{
+        name: 'Total Requests',
+        data: @json($transferReasons->pluck('total')->toArray())
+    }, {
+        name: 'Approved Requests',
+        data: @json($transferReasons->pluck('approved')->toArray())
+    }],
+    chart: {
+        type: 'bar',
+        height: 350,
+        stacked: false,
+    },
+    plotOptions: {
+        bar: {
+            horizontal: true,
+            dataLabels: {
+                position: 'top',
+            },
+        }
+    },
+    dataLabels: {
+        enabled: true,
+        offsetX: -6,
+        style: {
+            fontSize: '12px',
+            colors: ['#fff']
+        }
+    },
+    stroke: {
+        show: true,
+        width: 1,
+        colors: ['#fff']
+    },
+    xaxis: {
+        categories: @json($transferReasons->pluck('name')->toArray()),
+        title: {
+            text: 'Number of Requests'
+        }
+    },
+    yaxis: {
+        title: {
+            text: 'Transfer Reasons'
+        },
+    },
+    tooltip: {
+        shared: false,
+        y: {
+            formatter: function (val) {
+                return val + " requests"
+            }
+        }
+    },
+    colors: ['#008FFB', '#00E396'],
+    legend: {
+        position: 'top',
+        horizontalAlign: 'left',
+        offsetX: 40
+    }
+});
+transferReasonsChart.render();
         });
     </script>
 </div>

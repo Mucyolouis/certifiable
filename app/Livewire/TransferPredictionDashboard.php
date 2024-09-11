@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Services\TransferPredictionService;
+use Illuminate\Support\Collection;
 
 class TransferPredictionDashboard extends Component
 {
@@ -11,6 +12,7 @@ class TransferPredictionDashboard extends Component
     public $roleDistribution;
     public $churchTransfers;
     public $featureImportance;
+    public $transferReasons;
 
     protected $transferPredictionService;
 
@@ -38,6 +40,7 @@ class TransferPredictionDashboard extends Component
         $this->roleDistribution = $this->getRoleDistributionData($transferRequests);
         $this->churchTransfers = $this->getChurchTransfersData($transferRequests);
         $this->featureImportance = $this->getFeatureImportanceData();
+        $this->transferReasons = $this->getTransferReasonsData();
     }
 
     private function getApprovalStatusData($transferRequests)
@@ -83,6 +86,41 @@ class TransferPredictionDashboard extends Component
             ['name' => 'To Church', 'value' => 0.2],
             ['name' => 'Age', 'value' => 0.15],
             ['name' => 'Gender', 'value' => 0.15],
+        ];
+    }
+
+
+    private function getTransferReasonsData()
+    {
+        // Ensure the model is trained before calling analyzeTransferReasons
+        $this->transferPredictionService->train();
+        
+        $reasonsAnalysis = $this->transferPredictionService->analyzeTransferReasons();
+        
+        return collect($reasonsAnalysis)->map(function ($stats, $reason) {
+            return [
+                'name' => $reason,
+                'total' => $stats['total'],
+                'approved' => $stats['approved'],
+                'approval_rate' => $stats['approval_rate']
+            ];
+        })->sortByDesc('total')->values();
+    }
+
+
+    public function getTransferReasonsForChart()
+    {
+        return [
+            'labels' => $this->transferReasons->pluck('name')->toArray(),
+            'datasets' => [
+                [
+                    'label' => 'Approval Rate',
+                    'data' => $this->transferReasons->pluck('approval_rate')->toArray(),
+                    'backgroundColor' => 'rgba(75, 192, 192, 0.6)',
+                    'borderColor' => 'rgba(75, 192, 192, 1)',
+                    'borderWidth' => 1
+                ]
+            ]
         ];
     }
 }

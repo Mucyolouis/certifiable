@@ -23,8 +23,8 @@ class BaptismCheckController extends Controller
 
         return view('baptism.check', [
             'baptism' => $baptism,
-            'is_baptized' => $baptism->is_baptized,
-            'is_certified' => $baptism->is_certified,
+            'is_baptized' => $baptism->baptized,
+            'is_certified' => $baptism->baptized,
         ]);
     }
 }

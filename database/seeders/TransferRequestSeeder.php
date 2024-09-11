@@ -12,29 +12,44 @@ class TransferRequestSeeder extends Seeder
     public function run()
     {
         // Get all users with the role 'christian'
-        $christians = User::where('role', 'christian')->get();
+        $christians = User::role('christian')->get();
 
         // Get all churches
         $churches = Church::all();
 
         // Get all users with the role 'pastor'
-        $pastors = User::where('role', 'pastor')->get();
+        $pastors = User::role('pastor')->get();
+
+        // Check if we have the necessary data
+        if ($christians->isEmpty()) {
+            $this->command->info('No users with "christian" role found. Skipping TransferRequest seeding.');
+            return;
+        }
+
+        if ($churches->count() < 2) {
+            $this->command->info('Not enough churches found. At least 2 churches are required. Skipping TransferRequest seeding.');
+            return;
+        }
+
+        if ($pastors->isEmpty()) {
+            $this->command->info('No users with "pastor" role found. Skipping TransferRequest seeding.');
+            return;
+        }
 
         foreach ($christians as $christian) {
-            // Create 1-3 transfer requests for each christian
-            $numRequests = rand(1, 3);
-
-            for ($i = 0; $i < $numRequests; $i++) {
+            for ($i = 0; $i < 2; $i++) {
                 $fromChurch = $churches->random();
                 $toChurch = $churches->except($fromChurch->id)->random();
+                $status = $this->getRandomStatus();
 
                 TransferRequest::create([
                     'christian_id' => $christian->id,
                     'from_church_id' => $fromChurch->id,
                     'to_church_id' => $toChurch->id,
+                    'reason' => $this->getRandomReason(),
                     'description' => $this->getRandomDescription(),
-                    'approval_status' => $this->getRandomStatus(),
-                    'approved_by' => $this->getRandomStatus() !== 'Pending' ? $pastors->random()->id : null,
+                    'approval_status' => $status,
+                    'approved_by' => $status !== 'Pending' ? $pastors->random()->id : null,
                 ]);
             }
         }
@@ -43,20 +58,45 @@ class TransferRequestSeeder extends Seeder
     private function getRandomDescription()
     {
         $descriptions = [
-            'Moving to a new city',
+            'Geographical Relocation',
+            'Theological Differences',
+            'Family Reasons',
+            'Work',
+            'Church Leadership and Management',
             'Closer to home',
             'Prefer the worship style',
             'Better youth programs',
             'More volunteer opportunities',
+            'Other',
+            
         ];
 
         return $descriptions[array_rand($descriptions)];
     }
 
+    private function getRandomReason()
+    {
+        $reasons = [
+            'Geographical Relocation',
+            'Theological Differences',
+            'Family Reasons',
+            'Work',
+            'Church Leadership and Management',
+            'Closer to home',
+            'Prefer the worship style',
+            'Better youth programs',
+            'More volunteer opportunities',
+            'Other',
+            
+        ];
+
+        return $reasons[array_rand($reasons)];
+    }
+
     private function getRandomStatus()
     {
         $statuses = ['Pending', 'Approved', 'Rejected'];
-        $weights = [70, 20, 10];
+        $weights = [80, 10, 10];
 
         return $this->getRandomWeightedElement($statuses, $weights);
     }

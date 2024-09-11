@@ -189,6 +189,11 @@ class TransferRequestResource extends Resource
     public static function canCreate(): bool
 {
     $user = auth()->user();
+
+    if (!$user->is_baptized) {
+        return false;
+    }
+    
     return !TransferRequest::where('christian_id', $user->id)
         ->where('approval_status', 'pending')
         ->exists();

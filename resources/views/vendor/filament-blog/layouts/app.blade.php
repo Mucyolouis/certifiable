@@ -197,7 +197,7 @@
                                     <p class="font-semibold text-gray-300">No links found</p>
                                 @endforelse
                             </div>
-                            <div class="flex flex-col items-start gap-3 text-sm font-medium">
+                            {{-- <div class="flex flex-col items-start gap-3 text-sm font-medium">
                                 <div class="relative px-6 py-4 overflow-hidden text-black rounded-2xl bg-slate-100">
                                     <div class="pb-2 mb-3 text-xl font-semibold">
                                         Subscribe to our Newsletter
@@ -236,7 +236,7 @@
                                             class="bi bi-envelope pointer-events-none absolute -right-10 -top-20 text-[9rem] opacity-10"></i>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

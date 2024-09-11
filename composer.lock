@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "720fc20cfe7da3461c08a667579202f8",
+    "content-hash": "cd8c69b81f6c721784abbaffeb66b391",
     "packages": [
         {
             "name": "africastalking/africastalking",
@@ -3699,6 +3699,59 @@
             "time": "2024-07-15T19:30:08+00:00"
         },
         {
+            "name": "kenepa/multi-widget",
+            "version": "2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kenepa/multi-widget.git",
+                "reference": "813cc3cadcfd65979ff66fc58a38358b32f34b6f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kenepa/multi-widget/zipball/813cc3cadcfd65979ff66fc58a38358b32f34b6f",
+                "reference": "813cc3cadcfd65979ff66fc58a38358b32f34b6f",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.0",
+                "php": "^8.0",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "tightenco/duster": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Kenepa\\MultiWidget\\MultiWidgetServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kenepa\\MultiWidget\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Filament widget that encompasses multiple widgets.",
+            "homepage": "https://github.com/kenepa/multi-widget",
+            "keywords": [
+                "Kenepa",
+                "filament",
+                "laravel",
+                "multi-widget"
+            ],
+            "support": {
+                "issues": "https://github.com/kenepa/multi-widget/issues",
+                "source": "https://github.com/kenepa/multi-widget/tree/2.0.2"
+            },
+            "time": "2023-09-27T11:48:08+00:00"
+        },
+        {
             "name": "kirschbaum-development/eloquent-power-joins",
             "version": "3.5.7",
             "source": {
@@ -4159,16 +4212,16 @@
         },
         {
             "name": "laravel/reverb",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/reverb.git",
-                "reference": "d4993bc6b8664d439c1c7d248bd25ef371e532cf"
+                "reference": "46bb5dd0b14ba0ae9d3dd740e60bca279b689a63"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/reverb/zipball/d4993bc6b8664d439c1c7d248bd25ef371e532cf",
-                "reference": "d4993bc6b8664d439c1c7d248bd25ef371e532cf",
+                "url": "https://api.github.com/repos/laravel/reverb/zipball/46bb5dd0b14ba0ae9d3dd740e60bca279b689a63",
+                "reference": "46bb5dd0b14ba0ae9d3dd740e60bca279b689a63",
                 "shasum": ""
             },
             "require": {
@@ -4235,9 +4288,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/reverb/issues",
-                "source": "https://github.com/laravel/reverb/tree/v1.2.0"
+                "source": "https://github.com/laravel/reverb/tree/v1.3.0"
             },
-            "time": "2024-08-16T17:59:50+00:00"
+            "time": "2024-09-03T10:04:47+00:00"
         },
         {
             "name": "laravel/sanctum",

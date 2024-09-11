@@ -157,6 +157,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         return $this->marital_status === 'single';
     }
     
+
     public function getFullnameAttribute()
     {
         return "{$this->firstname} {$this->lastname}";

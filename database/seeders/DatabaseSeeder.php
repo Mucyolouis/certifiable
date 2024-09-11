@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             BannersTableSeeder::class,
             BlogCategoriesTableSeeder::class,
             BlogPostsTableSeeder::class,
+            TransferRequestSeeder::class,
         ]);
 
         Artisan::call('shield:generate --all');

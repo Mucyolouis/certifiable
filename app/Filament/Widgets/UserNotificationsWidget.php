@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserNotificationsWidget extends Widget
 {
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 6;
     protected static string $view = 'filament.widgets.user-notifications-widget';
 
     public function getNotifications()

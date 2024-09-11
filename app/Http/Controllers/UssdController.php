@@ -57,7 +57,7 @@ class UssdController extends Controller
 
     private function loginPrompt()
     {
-        return "CON Welcome to Church USSD Service\nPlease enter your email:";
+        return "CON Welcome to TUMBA Parish USSD Service\nPlease enter your email:";
     }
 
     private function passwordPrompt($email)

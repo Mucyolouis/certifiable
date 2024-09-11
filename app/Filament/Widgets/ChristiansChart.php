@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\User;
 use Flowframe\Trend\Trend;
+use Illuminate\Support\Carbon;
 use Flowframe\Trend\TrendValue;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,10 @@ use Illuminate\Support\Facades\Auth;
 class ChristiansChart extends ChartWidget
 {
     protected static ?string $heading = 'Christian Registration';
+
+    
+    // Set a high sort order to ensure it appears first
+    protected static ?int $sort = 1;
 
     public static function canView(): bool
     {
@@ -33,7 +38,7 @@ class ChristiansChart extends ChartWidget
                     'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
                 ],
             ],
-            'labels' => $data->map(fn (TrendValue $value) => $value->date),
+            'labels' => $data->map(fn (TrendValue $value) => Carbon::parse($value->date)->format('M')),
         ];
     }
 

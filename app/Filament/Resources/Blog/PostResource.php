@@ -103,7 +103,7 @@ class PostResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                Tables\Columns\TextColumn::make('author_fullname')
+                Tables\Columns\TextColumn::make('username')
                     ->label('Author')
                     ->getStateUsing(fn (Post $record): string => $record->author->firstname . ' ' . $record->author->lastname)
                     ->searchable(query: function (Builder $query, string $search): Builder {

@@ -13,6 +13,8 @@ class MarriageCertificateWidget extends Widget
 {
     protected static string $view = 'filament.widgets.marriage-certificate-widget';
 
+    protected static ?int $sort = 3;
+
     public static function canView(): bool
     {
         $user = Auth::user();

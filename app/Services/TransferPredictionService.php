@@ -17,6 +17,18 @@ class TransferPredictionService
     protected $model;
     protected $tfidf;
     protected $tokenizer;
+    protected $transferReasons = [
+            'Geographical Relocation',
+            'Theological Differences',
+            'Family Reasons',
+            'Work',
+            'Church Leadership and Management',
+            'Closer to home',
+            'Prefer the worship style',
+            'Better youth programs',
+            'More volunteer opportunities',
+            'Other',
+    ];
 
     public function __construct()
         {
@@ -24,6 +36,8 @@ class TransferPredictionService
             $this->tfidf = new TfIdfTransformer();
             $this->tokenizer = new WhitespaceTokenizer();
             $this->vocabulary = [];
+            $this->transferReasons= [];
+
         }
 
     public function train()
@@ -128,31 +142,38 @@ class TransferPredictionService
             return $this->model->predict($tokenizedFeatures)[1];
         }
 
-    protected function prepareFeatures($request)
+        protected function prepareFeatures($request)
         {
             if ($request instanceof TransferRequest) {
-                return [
+                $features = [
                     'role' => $request->christian->role ?? '',
                     'from_church' => $request->fromChurch->name ?? '',
                     'to_church' => $request->toChurch->name ?? '',
                     'description' => $request->description ?? '',
                     'age' => $request->christian->age ?? '',
                     'gender' => $request->christian->gender ?? '',
-                    // Add more relevant features here
+                    'reason' => $request->reason ?? '',
                 ];
             } elseif (is_array($request)) {
-                return [
+                $features = [
                     'role' => $request['christian']['role'] ?? '',
                     'from_church' => $request['from_church']['name'] ?? '',
                     'to_church' => $request['to_church']['name'] ?? '',
                     'description' => $request['description'] ?? '',
                     'age' => $request['christian']['age'] ?? '',
                     'gender' => $request['christian']['gender'] ?? '',
-                    // Add more relevant features here
+                    'reason' => $request['reason'] ?? '',
                 ];
             } else {
                 throw new \InvalidArgumentException("Invalid input type for prediction. Expected TransferRequest object or array.");
             }
+    
+            // Add one-hot encoding for transfer reasons
+            foreach ($this->transferReasons as $reason) {
+                $features['reason_' . $this->sanitizeString($reason)] = ($features['reason'] === $reason) ? '1' : '0';
+            }
+    
+            return $features;
         }
 
     protected function buildVocabulary(array $features)
@@ -195,31 +216,7 @@ class TransferPredictionService
     public function getTransferRequests()
         {
             return TransferRequest::with(['christian', 'fromChurch', 'toChurch'])->get();
-        }
-    // public function predictPercentageOfTransfers()
-    //     {
-    //         if (!$this->isTrained) {
-    //             throw new \Exception("Model is not trained. Please train the model first.");
-    //         }
-    
-    //         $transferRequests = $this->getTransferRequests();
-    //         $totalPredictions = count($transferRequests);
-    //         $predictedTransfers = 0;
-    
-    //         foreach ($transferRequests as $request) {
-    //             $features = $this->prepareFeatures($request);
-    //             $tokenizedFeatures = $this->tokenizeFeatures($features);
-    //             $prediction = $this->model->predict($tokenizedFeatures);
-                
-    //             if ($prediction == 'approved') {
-    //                 $predictedTransfers++;
-    //             }
-    //         }
-    
-    //         $percentagePredicted = ($predictedTransfers / $totalPredictions) * 100;
-    //         return round($percentagePredicted, 2);
-    //     }
-    
+        }   
     public function predictPercentageOfTransfers()
     {
         if (!$this->isTrained) {
@@ -268,4 +265,85 @@ class TransferPredictionService
 
         return round($percentagePredicted, 2);
     }
+
+    public function getFeatureImportance()
+    {
+        if (!$this->isTrained) {
+            throw new \Exception("Model is not trained. Please train the model first.");
+        }
+
+        // This is a placeholder. SVC doesn't provide feature importance out of the box.
+        // You might need to use a different model or implement a custom solution to get actual feature importance.
+        $features = array_keys($this->vocabulary);
+        $importance = array_fill(0, count($features), 1 / count($features));
+
+        return array_combine($features, $importance);
+    }
+
+
+    public function analyzeTransferReasons()
+{
+    if (!$this->isTrained) {
+        throw new \Exception("Model is not trained. Please train the model first.");
+    }
+
+    $transferRequests = $this->getTransferRequests();
+    $reasonCounts = array_fill_keys($this->transferReasons, 0);
+    $approvedCounts = array_fill_keys($this->transferReasons, 0);
+    $otherCount = 0;
+    $otherApprovedCount = 0;
+
+    foreach ($transferRequests as $request) {
+        $reason = $request->reason;
+        
+        // Check if the reason is in our predefined list
+        if (in_array($reason, $this->transferReasons)) {
+            $reasonCounts[$reason]++;
+
+            $features = $this->prepareFeatures($request);
+            $tokenizedFeatures = $this->tokenizeFeatures($features);
+            $prediction = $this->model->predict($tokenizedFeatures);
+
+            if ($prediction == 'approved') {
+                $approvedCounts[$reason]++;
+            }
+        } else {
+            // If not, count it as "Other"
+            $otherCount++;
+            
+            $features = $this->prepareFeatures($request);
+            $tokenizedFeatures = $this->tokenizeFeatures($features);
+            $prediction = $this->model->predict($tokenizedFeatures);
+
+            if ($prediction == 'approved') {
+                $otherApprovedCount++;
+            }
+        }
+    }
+
+    $analysis = [];
+    foreach ($this->transferReasons as $reason) {
+        $totalCount = $reasonCounts[$reason];
+        $approvedCount = $approvedCounts[$reason];
+        $approvalRate = $totalCount > 0 ? ($approvedCount / $totalCount) * 100 : 0;
+
+        $analysis[$reason] = [
+            'total' => $totalCount,
+            'approved' => $approvedCount,
+            'approval_rate' => round($approvalRate, 2)
+        ];
+    }
+
+    // Add "Other" category if there were any reasons not in the predefined list
+    if ($otherCount > 0) {
+        $otherApprovalRate = ($otherApprovedCount / $otherCount) * 100;
+        $analysis['Other'] = [
+            'total' => $otherCount,
+            'approved' => $otherApprovedCount,
+            'approval_rate' => round($otherApprovalRate, 2)
+        ];
+    }
+
+    return $analysis;
+}
 }

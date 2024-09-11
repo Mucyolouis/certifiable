@@ -8,13 +8,16 @@ use Filament\Widgets;
 use Filament\PanelProvider;
 use Firefly\FilamentBlog\Blog;
 use App\Settings\GeneralSettings;
+use Filament\Navigation\MenuItem;
 use App\Filament\Pages\Auth\Login;
 use App\Livewire\MyProfileExtended;
 use App\Filament\Pages\Auth\Register;
 use Illuminate\Support\Facades\Storage;
+use App\Filament\Pages\BaptismPredictions;
 use Filament\Http\Middleware\Authenticate;
 use App\Filament\Pages\Auth\EmailVerification;
 use Illuminate\Session\Middleware\StartSession;
+use App\Filament\Pages\ChurchBaptismPredictions;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use App\Filament\Pages\Auth\RequestPasswordReset;
 use Afsakar\FilamentOtpLogin\FilamentOtpLoginPlugin;
@@ -57,6 +60,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
+                ChurchBaptismPredictions::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
@@ -107,6 +111,12 @@ class AdminPanelProvider extends PanelProvider
                     ->myProfileComponents([
                         'personal_info' => MyProfileExtended::class,
                     ]),
+            ])
+            ->userMenuItems([
+                'chat' => MenuItem::make()
+                ->label('Messenger')
+                ->url('/chatify')
+                ->icon('heroicon-o-chat-bubble-left-right'),
             ]);
     }
 }

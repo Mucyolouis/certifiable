@@ -12,7 +12,7 @@ class RolesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $roles = ["super_admin", "admin", "author","christian","pastor"];
+        $roles = ["super_admin", "author", "christian", "pastor"];
 
         foreach ($roles as $key => $role) {
             DB::table('roles')->insert(
