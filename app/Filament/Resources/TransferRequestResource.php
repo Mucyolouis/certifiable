@@ -11,6 +11,7 @@ use App\Enums\TransferReason;
 use App\Models\TransferRequest;
 use Illuminate\Validation\Rule;
 use Filament\Resources\Resource;
+use App\Services\ChurchRecommender; 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Select;
@@ -24,7 +25,7 @@ use App\Filament\Resources\TransferRequestResource\RelationManagers;
 class TransferRequestResource extends Resource
 {
     protected static ?string $model = TransferRequest::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-path-rounded-square';
     protected static ?string $navigationGroup = 'Services';
     protected static ?int $navigationSort = -1;
 
@@ -55,10 +56,22 @@ class TransferRequestResource extends Resource
                 Forms\Components\Hidden::make('from_church_id')
                     ->default(fn () => Auth::user()->church_id),
 
-                Forms\Components\Select::make('to_church_id')
+                    Forms\Components\Select::make('to_church_id')
                     ->label('To Church')
-                    ->options(Church::where('id', '!=', Auth::user()->church_id)->pluck('name', 'id'))
-                    ->searchable()  
+                    ->options(function () {
+                        $user = Auth::user();
+                        $recommender = new ChurchRecommender();
+                        $recommendedChurches = $recommender->recommend($user, 5);
+                        
+                        $otherChurches = Church::where('id', '!=', $user->church_id)
+                            ->whereNotIn('id', $recommendedChurches->pluck('id'))
+                            ->pluck('name', 'id');
+
+                        return $recommendedChurches->pluck('name', 'id')
+                            ->map(fn ($name) => "⭐ $name (Recommended)")
+                            ->union($otherChurches);
+                    })
+                    ->searchable()
                     ->required(),
 
                 Forms\Components\Select::make('reason')
@@ -188,14 +201,14 @@ class TransferRequestResource extends Resource
 
     public static function canCreate(): bool
 {
-    $user = auth()->user();
+    // $user = auth()->user();
 
-    if (!$user->is_baptized) {
-        return false;
-    }
-    
-    return !TransferRequest::where('christian_id', $user->id)
-        ->where('approval_status', 'pending')
-        ->exists();
+    // if (!$user->is_baptized) {
+    //     return false;
+    // }
+    return true;
+    // return !TransferRequest::where('christian_id', $user->id)
+    //     ->where('approval_status', 'pending')
+    //     ->exists();
 }
 }

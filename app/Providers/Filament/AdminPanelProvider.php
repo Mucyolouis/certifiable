@@ -13,6 +13,7 @@ use App\Filament\Pages\Auth\Login;
 use App\Livewire\MyProfileExtended;
 use App\Filament\Pages\Auth\Register;
 use Illuminate\Support\Facades\Storage;
+use Filament\Navigation\NavigationGroup;
 use App\Filament\Pages\BaptismPredictions;
 use Filament\Http\Middleware\Authenticate;
 use App\Filament\Pages\Auth\EmailVerification;
@@ -21,7 +22,9 @@ use App\Filament\Pages\ChurchBaptismPredictions;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use App\Filament\Pages\Auth\RequestPasswordReset;
 use Afsakar\FilamentOtpLogin\FilamentOtpLoginPlugin;
+use App\Filament\Resources\BaptismPredictionResource;
 use Illuminate\Routing\Middleware\SubstituteBindings;
+use App\Filament\Resources\MarriagePredictionResource;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -30,6 +33,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use EightyNine\FilamentPasswordExpiry\PasswordExpiryPlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use App\Filament\Resources\TransferRequestPredictionResource;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -117,6 +121,7 @@ class AdminPanelProvider extends PanelProvider
                 ->label('Messenger')
                 ->url('/chatify')
                 ->icon('heroicon-o-chat-bubble-left-right'),
-            ]);
+            ])
+            ;
     }
 }

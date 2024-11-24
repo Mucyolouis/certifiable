@@ -11,6 +11,7 @@ class TransferPredictionDashboard extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
+    protected static ?string $navigationGroup = 'Predictions';
     protected static string $view = 'filament.pages.transfer-prediction-dashboard';
 
     public static function shouldRegister(): bool
@@ -38,7 +39,7 @@ class TransferPredictionDashboard extends Page
         $predictionService = new TransferPredictionService();
         try {
             $percentage = $predictionService->predictPercentageOfTransfers();
-            return "We predict that {$percentage}% of Christians will request transfer.";
+            return "We predict that {$percentage}% of Christians will request transfer this Month.";
         } catch (\Exception $e) {
             return "Unable to generate prediction at this time. Error: " . $e->getMessage();
         }

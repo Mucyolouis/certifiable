@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        Artisan::call('shield:generate --all');
         $this->call([
             RolesTableSeeder::class,
             ParishesTableSeeder::class,
@@ -22,9 +23,10 @@ class DatabaseSeeder extends Seeder
             BannersTableSeeder::class,
             BlogCategoriesTableSeeder::class,
             BlogPostsTableSeeder::class,
-            TransferRequestSeeder::class,
+            MarriageSeeder::class,
+            //TransferRequestSeeder::class,
         ]);
 
-        Artisan::call('shield:generate --all');
+        // Artisan::call('shield:generate --all');
     }
 }

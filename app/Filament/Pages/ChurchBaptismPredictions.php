@@ -25,8 +25,8 @@ class ChurchBaptismPredictions extends Page implements HasForms, HasTable
     use InteractsWithTable;
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
-
+    protected static ?string $navigationIcon = 'heroicon-o-receipt-percent';
+    protected static ?string $navigationGroup = 'Predictions';
     protected static string $view = 'filament.pages.church-baptism-predictions';
 
     protected static ?string $title = 'Church Baptism Predictions';
@@ -34,6 +34,15 @@ class ChurchBaptismPredictions extends Page implements HasForms, HasTable
     protected static ?string $navigationLabel = 'Church Baptism Rates';
 
     protected static ?int $navigationSort = 4;
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->check() && auth()->user()->hasRole(['super_admin', 'pastor']);
+    }
+
+    public static function canAccess(): bool
+    {
+        return auth()->check() && auth()->user()->hasRole(['super_admin', 'pastor']);
+    }
 
     
 

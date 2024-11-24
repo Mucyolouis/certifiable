@@ -23,7 +23,7 @@ class MarriageResource extends Resource
 {
     protected static ?string $model = Marriage::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-heart';
     protected static ?string $navigationGroup = 'Services';
 
     public static function form(Form $form): Form

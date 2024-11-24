@@ -104,6 +104,7 @@ class Register extends BaseRegister
         $user = $this->getUserModel()::create([
             'firstname' => $data['firstname'],
             'lastname' => $data['lastname'],
+            'name' => $data['firstname']." ".$data['lastname'],
             'date_of_birth' => $data['date_of_birth'],
             'mother_name' => $data['mother_name'],
             'father_name' => $data['father_name'],

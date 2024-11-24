@@ -1,23 +1,23 @@
 <div>
     <div class="grid grid-cols-3 gap-4">
         <div class="p-4 rounded-lg shadow">
-            <h2 class="text-lg font-semibold mb-4">Approval Status Distribution</h2>
+            <h2 class="mb-4 text-lg font-semibold">Approval Status Distribution</h2>
             <div id="approvalStatusChart" style="height: 300px;"></div>
         </div>
-        <div class="p-4 rounded-lg shadow">
-            <h2 class="text-lg font-semibold mb-4">Role Distribution</h2>
+        {{-- <div class="p-4 rounded-lg shadow">
+            <h2 class="mb-4 text-lg font-semibold">Role Distribution</h2>
             <div id="roleDistributionChart" style="height: 300px;"></div>
-        </div>
+        </div> --}}
         <div class="p-4 rounded-lg shadow">
-            <h2 class="text-lg font-semibold mb-4">Top Church Transfers</h2>
+            <h2 class="mb-4 text-lg font-semibold">Top Church Transfers</h2>
             <div id="churchTransfersChart" style="height: 300px;"></div>
         </div>
         <div class="p-4 rounded-lg shadow">
-            <h2 class="text-lg font-semibold mb-4">Feature Importance</h2>
+            <h2 class="mb-4 text-lg font-semibold">Feature Importance</h2>
             <div id="featureImportanceChart" style="height: 300px;"></div>
         </div>
         <div class="p-4 rounded-lg shadow">
-            <h2 class="text-lg font-semibold mb-4">Transfer Reasons</h2>
+            <h2 class="mb-4 text-lg font-semibold">Transfer Reasons</h2>
             <div id="transferReasonsChart" style="height: 300px;"></div>
         </div>
     </div>
@@ -38,18 +38,18 @@
             });
             approvalStatusChart.render();
 
-            var roleDistributionChart = new ApexCharts(document.querySelector("#roleDistributionChart"), {
-                series: [{
-                    data: @json(array_column($roleDistribution, 'value'))
-                }],
-                chart: {
-                    type: 'bar',
-                },
-                xaxis: {
-                    categories: @json(array_column($roleDistribution, 'name')),
-                },
-            });
-            roleDistributionChart.render();
+            // var roleDistributionChart = new ApexCharts(document.querySelector("#roleDistributionChart"), {
+            //     series: [{
+            //         data: @json(array_column($roleDistribution, 'value'))
+            //     }],
+            //     chart: {
+            //         type: 'bar',
+            //     },
+            //     xaxis: {
+            //         categories: @json(array_column($roleDistribution, 'name')),
+            //     },
+            // });
+            // roleDistributionChart.render();
 
             var churchTransfersChart = new ApexCharts(document.querySelector("#churchTransfersChart"), {
                 series: @json(array_column($churchTransfers, 'value')),

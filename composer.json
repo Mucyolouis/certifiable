@@ -6,9 +6,9 @@
         "filament",
         "filamentphp",
         "laravel",
-        "filament starter kit",
+        "ecertify",
         "starter kit",
-        "superduper"
+        "christians"
     ],
     "authors": [
         {
@@ -26,6 +26,7 @@
         "bezhansalleh/filament-exceptions": "^2.1",
         "bezhansalleh/filament-shield": "^3.2",
         "codeat3/blade-fluentui-system-icons": "^1.32",
+        "codeat3/blade-rpg-awesome-icons": "^1.5",
         "dutchcodingcompany/filament-developer-logins": "^1.2",
         "filament/filament": "^3.2",
         "filament/spatie-laravel-media-library-plugin": "^3.2",

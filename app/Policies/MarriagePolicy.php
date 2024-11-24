@@ -15,7 +15,7 @@ class MarriagePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_marriage');
+        return $user->can('view_any_marriage::prediction');
     }
 
     /**
@@ -23,7 +23,7 @@ class MarriagePolicy
      */
     public function view(User $user, Marriage $marriage): bool
     {
-        return $user->can('view_marriage');
+        return $user->can('view_marriage::prediction');
     }
 
     /**
@@ -31,7 +31,7 @@ class MarriagePolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_marriage');
+        return $user->can('create_marriage::prediction');
     }
 
     /**
@@ -39,7 +39,7 @@ class MarriagePolicy
      */
     public function update(User $user, Marriage $marriage): bool
     {
-        return $user->can('update_marriage');
+        return $user->can('update_marriage::prediction');
     }
 
     /**
@@ -47,7 +47,7 @@ class MarriagePolicy
      */
     public function delete(User $user, Marriage $marriage): bool
     {
-        return $user->can('delete_marriage');
+        return $user->can('delete_marriage::prediction');
     }
 
     /**
@@ -55,7 +55,7 @@ class MarriagePolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_marriage');
+        return $user->can('delete_any_marriage::prediction');
     }
 
     /**
@@ -63,7 +63,7 @@ class MarriagePolicy
      */
     public function forceDelete(User $user, Marriage $marriage): bool
     {
-        return $user->can('force_delete_marriage');
+        return $user->can('force_delete_marriage::prediction');
     }
 
     /**
@@ -71,7 +71,7 @@ class MarriagePolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_marriage');
+        return $user->can('force_delete_any_marriage::prediction');
     }
 
     /**
@@ -79,7 +79,7 @@ class MarriagePolicy
      */
     public function restore(User $user, Marriage $marriage): bool
     {
-        return $user->can('restore_marriage');
+        return $user->can('restore_marriage::prediction');
     }
 
     /**
@@ -87,7 +87,7 @@ class MarriagePolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_marriage');
+        return $user->can('restore_any_marriage::prediction');
     }
 
     /**
@@ -95,7 +95,7 @@ class MarriagePolicy
      */
     public function replicate(User $user, Marriage $marriage): bool
     {
-        return $user->can('replicate_marriage');
+        return $user->can('replicate_marriage::prediction');
     }
 
     /**
@@ -103,6 +103,6 @@ class MarriagePolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_marriage');
+        return $user->can('reorder_marriage::prediction');
     }
 }

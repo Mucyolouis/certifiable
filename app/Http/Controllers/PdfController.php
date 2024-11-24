@@ -9,6 +9,7 @@ use App\Models\Church;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Milon\Barcode\DNS2D;
 
 class PdfController extends Controller
 {
@@ -70,12 +71,19 @@ class PdfController extends Controller
         $baptism = User::findOrFail($id);
         $ministry = Ministry::findOrFail($baptism->ministry_id);
         $church = Church::findOrFail($baptism->church_id);
+        $pastor = User::findOrFail($baptism->baptized_by);
+
+        // \Log::info('Baptism data:', ['baptism' => $baptism->toArray()]);
+        // \Log::info('Pastor data:', ['pastor' => $pastor ? $pastor->toArray() : 'Not found']);
 
         // Load the view and pass the data
         // $pdf = PDF::loadView('pdf.baptism', ['baptism' => $baptism]);
-        $pdf = Pdf::loadView('pdf.baptism', ['baptism' => $baptism,
-        'ministry' => $ministry, 
-        'church' => $church,]);
+        $pdf = Pdf::loadView('pdf.baptism', [
+            'baptism' => $baptism,
+            'ministry' => $ministry, 
+            'church' => $church,
+            'pastor' => $pastor,
+        ]);
         $pdf->setPaper('a4', 'landscape');
 
         
@@ -88,7 +96,7 @@ class PdfController extends Controller
         $fileName = str_replace(" ", "-", $filename);
        // smilify('success', 'PDF Downloaded');
         // Download the PDF
-        return $pdf->download($fileName);
+        return $pdf->download('baptism_certificate');
     }
 
 
@@ -98,6 +106,7 @@ class PdfController extends Controller
         $baptism = User::findOrFail($id);
         $ministry = Ministry::findOrFail($baptism->ministry_id);
         $church = Church::findOrFail($baptism->church_id);
+        $pastor = User::findOrFail($baptism->baptized_by);
 
         // Load the view and pass the data
         // $pdf = PDF::loadView('pdf.baptism', ['baptism' => $baptism]);
@@ -105,6 +114,7 @@ class PdfController extends Controller
             'baptism' => $baptism,
             'ministry' => $ministry, 
             'church' => $church,
+            'pastor' => $pastor,
         ]);
         $pdf->setPaper('a4', 'landscape');
 

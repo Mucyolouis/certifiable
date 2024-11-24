@@ -23,11 +23,11 @@ class MarriageObserver
         $spouse2 = User::find($marriage->spouse2_id);
 
         if ($spouse1) {
-            Mail::to($spouse1->email)->send(new MarriageCongratulations($spouse1));
+           // Mail::to($spouse1->email)->send(new MarriageCongratulations($spouse1));
         }
 
         if ($spouse2) {
-            Mail::to($spouse2->email)->send(new MarriageCongratulations($spouse2));
+           // Mail::to($spouse2->email)->send(new MarriageCongratulations($spouse2));
         }
     
     }

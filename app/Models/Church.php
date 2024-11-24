@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Parish;
+use App\Models\Ministry;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -37,4 +38,9 @@ class Church extends Model
     {
         return $this->hasMany(User::class)->whereNotNull('baptized_at');
     }
+
+    // public function ministries()
+    // {
+    //     return $this->hasMany(Ministry::class);
+    // }
 }

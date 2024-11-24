@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,7 +31,7 @@
             font-family: 'Great Vibes', cursive;
             color: #5f9ea0;
             font-size: 48px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             position: relative;
         }
 
@@ -63,7 +64,7 @@
         }
 
         .details {
-            margin-top: 30px;
+            margin-top: 20px;
         }
 
         .form-row {
@@ -102,7 +103,13 @@
         <div class="details">
             <div class="form-row">
                 <label>Baptized by:</label>
-                <span class="input">{{ $baptism->baptized_by }}</span>
+                <span class="input">
+                    @if($pastor && $pastor->firstname && $pastor->lastname)
+                      <b>Pastor</b> :  {{ $pastor->firstname }} {{ $pastor->lastname }}
+                    @else
+                        Information not available
+                    @endif
+                </span>
             </div>
             <div class="form-row">
                 <label>Church:</label>

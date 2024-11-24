@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class MinistryResource extends Resource
 {
     protected static ?string $model = Ministry::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-view-columns';
     protected static ?string $navigationGroup = 'Services';
     protected static ?int $navigationSort = -2;
 

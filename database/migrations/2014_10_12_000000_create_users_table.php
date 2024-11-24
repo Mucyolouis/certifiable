@@ -27,7 +27,6 @@ return new class extends Migration
             $table->foreignId('church_id')->constrained('churches')->nullable();
             $table->boolean('baptized')->default(false);
             $table->uuid('baptized_by')->nullable();
-           // $table->foreign('baptized_by')->references('id')->on('users')->onDelete('set null');
             $table->foreignId('ministry_id')->nullable()->constrained('ministries');
             $table->boolean('active_status')->default(0);
             $table->enum('marital_status', ['single', 'married','widowed'])->default('single');

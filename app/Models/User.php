@@ -107,9 +107,15 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
             ->nonQueued();
     }
 
-    public function canImpersonate()
+    public function canImpersonate(): bool
     {
-        return true;
+        return $this->hasRole('super_admin');
+    }
+
+    public function canBeImpersonated(): bool
+    {
+        // Prevent impersonating other superadmins
+        return !$this->hasRole('super_admin');
     }
 
     public function canComment(): bool

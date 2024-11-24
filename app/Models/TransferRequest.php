@@ -18,7 +18,7 @@ protected $guarded= [];
 
     public function christian()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'christian_id');
     }
 
     public function fromChurch()

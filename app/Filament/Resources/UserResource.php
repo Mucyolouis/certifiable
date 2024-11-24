@@ -204,6 +204,10 @@ class UserResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                    Tables\Columns\TextColumn::make('deleted_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 
             ])
             ->filters([
@@ -212,19 +216,26 @@ class UserResource extends Resource
                     ->query(fn (Builder $query): Builder => $query->where('baptized', true))
                     ->label('Baptized Christians')
                     ->default(false),
-                Tables\Filters\SelectFilter::make('trashed')
-                ->options([
-                    'with' => 'With Trashed',
-                    'only' => 'Only Trashed',
-                    'without' => 'Without Trashed',
-                ])
-                ->query(function (Builder $query, array $data) {
-                    if ($data['value'] === 'with') {
-                        $query->withTrashed();
-                    } elseif ($data['value'] === 'only') {
-                        $query->onlyTrashed();
-                    }
-                })
+                    Tables\Filters\SelectFilter::make('trashed')
+                    ->options([
+                        '' => 'All',
+                        'without' => 'Without Trashed',
+                        'with' => 'With Trashed',
+                        'only' => 'Only Trashed',
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        $value = $data['value'];
+                
+                        if ($value === 'with') {
+                            $query->withTrashed();
+                        } elseif ($value === 'only') {
+                            $query->onlyTrashed();
+                        } elseif ($value === 'without') {
+                            $query->withoutTrashed();
+                        }
+                    })
+                    ->label('Trashed Status')
+                    ->default('')
             ])
             ->actions([
                 ActionGroup::make([
@@ -235,6 +246,7 @@ class UserResource extends Resource
                             $record->update([
                                 'baptized' => 1,
                                 'baptized_at' => now(),
+                                'baptized_by' => Auth::user()->id,
                             ]);
 
                              // Send notification using email
@@ -259,7 +271,9 @@ class UserResource extends Resource
 
                     Tables\Actions\EditAction::make()
                         ->slideOver(),
-                    Tables\Actions\DeleteAction::make(),
+                        Tables\Actions\DeleteAction::make()
+                        ->action(fn (User $record) => $record->delete())
+                        ->requiresConfirmation(),
                     Tables\Actions\RestoreAction::make(),
                     Impersonate::make()
                     //->redirect(fn (User $record) => $record->redirectTo(route('/admin'))),
@@ -341,5 +355,10 @@ class UserResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+            
+        \Log::info('User query SQL: ' . $query->toSql());
+        \Log::info('User query bindings: ' . json_encode($query->getBindings()));
+
+        return $query;
     }
 }

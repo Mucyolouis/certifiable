@@ -105,6 +105,16 @@
         <p class="ministry">{{ $ministry->name }}</p>
         <div class="details">
             <p>Since <span class="date">{{ $baptism->baptized_at }}</span></p>
+            
+            <span class="input">
+                <p>Officiated by :
+                @if($pastor && $pastor->firstname && $pastor->lastname)
+                  <b>Pastor</b> :  {{ $pastor->firstname }} {{ $pastor->lastname }}
+                @else
+                    Information not available
+                @endif
+            </p>
+            </span>
             <p>At <span class="church">{{ $church->name }} Church</span></p>
         </div>
         <p class="blessing">May God bless and guide you on your spiritual journey.</p>

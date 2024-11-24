@@ -45,8 +45,8 @@ class TransferPredictionDashboard extends Component
 
     private function getApprovalStatusData($transferRequests)
     {
-        $approved = $transferRequests->where('approval_status', 'approved')->count();
-        $rejected = $transferRequests->where('approval_status', 'rejected')->count();
+        $approved = $transferRequests->where('approval_status', 'Approved')->count();
+        $rejected = $transferRequests->where('approval_status', 'Rejected')->count();
 
         return [
             ['name' => 'Approved', 'value' => $approved],

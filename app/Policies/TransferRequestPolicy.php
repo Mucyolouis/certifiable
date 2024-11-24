@@ -15,7 +15,7 @@ class TransferRequestPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_transfer::request');
+        return $user->can('view_any_transfer::request::prediction');
     }
 
     /**
@@ -23,7 +23,7 @@ class TransferRequestPolicy
      */
     public function view(User $user, TransferRequest $transferRequest): bool
     {
-        return $user->can('view_transfer::request');
+        return $user->can('view_transfer::request::prediction');
     }
 
     /**
@@ -31,7 +31,7 @@ class TransferRequestPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_transfer::request');
+        return $user->can('create_transfer::request::prediction');
     }
 
     /**
@@ -39,7 +39,7 @@ class TransferRequestPolicy
      */
     public function update(User $user, TransferRequest $transferRequest): bool
     {
-        return $user->can('update_transfer::request');
+        return $user->can('update_transfer::request::prediction');
     }
 
     /**
@@ -47,7 +47,7 @@ class TransferRequestPolicy
      */
     public function delete(User $user, TransferRequest $transferRequest): bool
     {
-        return $user->can('delete_transfer::request');
+        return $user->can('delete_transfer::request::prediction');
     }
 
     /**
@@ -55,7 +55,7 @@ class TransferRequestPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_transfer::request');
+        return $user->can('delete_any_transfer::request::prediction');
     }
 
     /**
@@ -63,7 +63,7 @@ class TransferRequestPolicy
      */
     public function forceDelete(User $user, TransferRequest $transferRequest): bool
     {
-        return $user->can('force_delete_transfer::request');
+        return $user->can('force_delete_transfer::request::prediction');
     }
 
     /**
@@ -71,7 +71,7 @@ class TransferRequestPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_transfer::request');
+        return $user->can('force_delete_any_transfer::request::prediction');
     }
 
     /**
@@ -79,7 +79,7 @@ class TransferRequestPolicy
      */
     public function restore(User $user, TransferRequest $transferRequest): bool
     {
-        return $user->can('restore_transfer::request');
+        return $user->can('restore_transfer::request::prediction');
     }
 
     /**
@@ -87,7 +87,7 @@ class TransferRequestPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_transfer::request');
+        return $user->can('restore_any_transfer::request::prediction');
     }
 
     /**
@@ -95,7 +95,7 @@ class TransferRequestPolicy
      */
     public function replicate(User $user, TransferRequest $transferRequest): bool
     {
-        return $user->can('replicate_transfer::request');
+        return $user->can('replicate_transfer::request::prediction');
     }
 
     /**
@@ -103,6 +103,6 @@ class TransferRequestPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_transfer::request');
+        return $user->can('reorder_transfer::request::prediction');
     }
 }
