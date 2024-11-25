@@ -3,14 +3,13 @@
 namespace App\Models;
 
 use App\Models\Parish;
-use App\Models\Ministry;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Church extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = ['parish_id', 'name'];
 
@@ -18,7 +17,7 @@ class Church extends Model
     {
         return $this->belongsTo(Parish::class);
     }
-    
+
     public function users()
     {
         return $this->hasMany(User::class);
@@ -26,21 +25,26 @@ class Church extends Model
 
     public function getUsersSummaryAttribute()
     {
-        $total = $this->users()->count();
-        $baptizedChristians = $this->users()->role('christian')->where('baptized', 1)->count();
-        $unbaptized = $this->users()->where('baptized', 0)->count();
-        $pastors = $this->users()->role('pastor')->count();
-        
-        return "Total: {$total}\nBaptized Christians: {$baptizedChristians}\nUnbaptized: {$unbaptized}\nPastors: {$pastors}";
-    }
+        $usersInstance = $this->users()->byRoles(['christian', 'pastor']);
+        $baptizedChristiansInstance = clone $usersInstance;
+        $unbaptizedInstance = clone $usersInstance;
+        $pastorsInstance = clone $usersInstance;
 
-    public function baptizedUsers()
-    {
-        return $this->hasMany(User::class)->whereNotNull('baptized_at');
-    }
+        $total = $usersInstance->count();
+        $baptizedChristians = $baptizedChristiansInstance
+            ->baptizedChristians()
+            ->count();
+        $unbaptized = $unbaptizedInstance->unbaptized()
+            ->count();
+        $pastors = $pastorsInstance->role('pastor')
+            ->count();
 
-    // public function ministries()
-    // {
-    //     return $this->hasMany(Ministry::class);
-    // }
+        return sprintf(
+            "Total: %d\nBaptized Christians: %d\nUnbaptized: %d\nPastors: %d",
+            $total,
+            $baptizedChristians,
+            $unbaptized,
+            $pastors
+        );
+    }
 }

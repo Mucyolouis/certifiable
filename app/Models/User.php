@@ -26,40 +26,31 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail, HasAvatar, HasName, HasMedia
 {
-    use InteractsWithMedia;
-    use HasUuids, HasRoles;
-    use HasApiTokens, HasFactory, Notifiable, HasPanelShield, Authorizable, SoftDeletes;
+    use HasApiTokens, 
+        HasFactory, 
+        HasPanelShield,
+        HasRoles,
+        HasUuids,
+        InteractsWithMedia,
+        Notifiable, 
+        Authorizable, 
+        SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $keyType = 'string';
     public $incrementing = false;
-    
     protected $guarded = [];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
 
+    // Relationships
     public function ministry()
     {
         return $this->belongsTo(Ministry::class);
@@ -69,74 +60,6 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
     {
         return $this->belongsTo(Church::class);
     }
-
-    public function getFilamentName(): string
-    {
-        return $this->username;
-    }
-
-    public function canAccessPanel(Panel $panel): bool
-    {
-        // if ($panel->getId() === 'admin') {
-        //     return str_ends_with($this->email, '@yourdomain.com') && $this->hasVerifiedEmail();
-        // }
-
-        return true;
-    }
-
-    public function getFilamentAvatarUrl(): ?string
-    {
-        return $this->getMedia('avatars')?->first()?->getUrl() ?? $this->getMedia('avatars')?->first()?->getUrl('thumb') ?? null;
-    }
-
-    // Define an accessor for the 'name' attribute
-    public function getNameAttribute()
-    {
-        return "{$this->firstname} {$this->lastname}";
-    }
-
-    public function isSuperAdmin(): bool
-    {
-        return $this->hasRole(config('filament-shield.super_admin.name'));
-    }
-
-    public function registerMediaConversions(Media|null $media = null): void
-    {
-        $this->addMediaConversion('thumb')
-            ->fit(Fit::Contain, 300, 300)
-            ->nonQueued();
-    }
-
-    public function canImpersonate(): bool
-    {
-        return $this->hasRole('super_admin');
-    }
-
-    public function canBeImpersonated(): bool
-    {
-        // Prevent impersonating other superadmins
-        return !$this->hasRole('super_admin');
-    }
-
-    public function canComment(): bool
-    {
-        // your conditional logic here
-        return true;
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = Str::uuid()->toString();
-            }
-        });
-    }
-
-
-    //ibijyanye na marriage
 
     public function marriagesAsSpouse1(): HasMany
     {
@@ -153,6 +76,65 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         return $this->hasMany(Marriage::class, 'officiated_by');
     }
 
+    // Filament-related methods
+    public function getFilamentName(): string
+    {
+        return $this->username;
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true;
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->getMedia('avatars')?->first()?->getUrl() ?? 
+               $this->getMedia('avatars')?->first()?->getUrl('thumb') ?? 
+               null;
+    }
+
+    // Accessors & Mutators
+    public function getNameAttribute()
+    {
+        return "{$this->firstname} {$this->lastname}";
+    }
+
+    public function getFullnameAttribute()
+    {
+        return "{$this->firstname} {$this->lastname}";
+    }
+
+    // Media Conversions
+    public function registerMediaConversions(Media|null $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->fit(Fit::Contain, 300, 300)
+            ->nonQueued();
+    }
+
+    // Authorization methods
+    public function isSuperAdmin(): bool
+    {
+        return $this->hasRole(config('filament-shield.super_admin.name'));
+    }
+
+    public function canImpersonate(): bool
+    {
+        return $this->hasRole('super_admin');
+    }
+
+    public function canBeImpersonated(): bool
+    {
+        return !$this->hasRole('super_admin');
+    }
+
+    public function canComment(): bool
+    {
+        return true;
+    }
+
+    // Marriage-related methods
     public function isMarried(): bool
     {
         return $this->marital_status === 'married';
@@ -162,11 +144,38 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
     {
         return $this->marital_status === 'single';
     }
-    
 
-    public function getFullnameAttribute()
+    // Scopes
+    public function scopeBaptizedChristians($query)
     {
-        return "{$this->firstname} {$this->lastname}";
+        return $query->whereHas('roles', function ($query) {
+            $query->where('name', 'christian');
+        })->where('baptized', 1);
     }
 
+    public function scopeUnbaptized($query)
+    {
+        return $query->whereHas('roles', function ($query) {
+            $query->where('name', 'christian');
+        })->where('baptized', 0);
+    }
+
+    public function scopeByRoles($query, $roles)
+    {
+        return $query->whereHas('roles', function ($query) use ($roles) {
+            $query->whereIn('name', $roles);
+        });
+    }
+
+    // Boot method
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = Str::uuid()->toString();
+            }
+        });
+    }
 }
